@@ -1,7 +1,7 @@
 # Seihon
 
 [![GitHub release](https://img.shields.io/github/release/ldez/seihon.svg)](https://github.com/ldez/seihon/releases/latest)
-[![Build Status](https://travis-ci.org/ldez/seihon.svg?branch=master)](https://travis-ci.org/ldez/seihon)
+[![Build Status](https://travis-ci.com/ldez/seihon.svg?branch=master)](https://travis-ci.com/ldez/seihon)
 [![Go Report Card](https://goreportcard.com/badge/github.com/ldez/seihon)](https://goreportcard.com/report/github.com/ldez/seihon)
 
 A simple tool to publish multi-arch images on the Docker Hub.
