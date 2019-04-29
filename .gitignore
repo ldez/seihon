@@ -1,0 +1,5 @@
+.idea/
+vendor/
+/linux-*.Dockerfile
+manifest.json
+seihon
