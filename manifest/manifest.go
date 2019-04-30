@@ -10,6 +10,8 @@ import (
 	"github.com/docker/distribution/manifest/manifestlist"
 )
 
+const manifestPath = "./manifest.json"
+
 // FindManifestDescriptor Finds manifest.
 func FindManifestDescriptor(os, arch, variant string, list *manifestlist.ManifestList) (manifestlist.ManifestDescriptor, error) {
 	for _, descriptor := range list.Manifests {
@@ -20,13 +22,11 @@ func FindManifestDescriptor(os, arch, variant string, list *manifestlist.Manifes
 		}
 	}
 
-	return manifestlist.ManifestDescriptor{}, fmt.Errorf("not supported: %s %s %s", os, arch, variant)
+	return manifestlist.ManifestDescriptor{}, fmt.Errorf("architecure not found in manifest: %s %s %s", os, arch, variant)
 }
 
 // Get Gets the manifest of the baseImage.
 func Get(baseImageName string) (*manifestlist.ManifestList, error) {
-	manifestPath := "./manifest.json"
-
 	if _, errExist := os.Stat(manifestPath); os.IsNotExist(errExist) {
 		err := inspect(baseImageName, manifestPath)
 		if err != nil {
@@ -57,6 +57,9 @@ func inspect(baseImageName, manifestPath string) error {
 
 	output, err := cmd.CombinedOutput()
 	if err != nil {
+		if len(output) != 0 {
+			fmt.Println(string(output))
+		}
 		return err
 	}
 
