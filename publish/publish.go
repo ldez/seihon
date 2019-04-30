@@ -2,14 +2,13 @@ package publish
 
 import (
 	"fmt"
-	"log"
 	"os/exec"
 	"strings"
 )
 
 const envDockerExperimental = "DOCKER_CLI_EXPERIMENTAL=enabled"
 
-var buildOptions = map[string]buildOption{
+var availableArchitectures = map[string]ArchDescriptor{
 	"386": {
 		OS:     "linux",
 		GoARCH: "386",
@@ -43,11 +42,26 @@ var buildOptions = map[string]buildOption{
 	},
 }
 
-type buildOption struct {
+// ArchDescriptor A descriptor for an architecture.
+type ArchDescriptor struct {
 	OS      string `json:"os"`
 	GoARCH  string `json:"go_arch"`
 	GoARM   string `json:"go_arm,omitempty"`
 	Variant string `json:"variant,omitempty"`
+}
+
+func GetTargetedArchitectures(targets []string) (map[string]ArchDescriptor, error) {
+	targetedArch := make(map[string]ArchDescriptor)
+
+	for _, target := range targets {
+		option, ok := availableArchitectures[target]
+		if !ok {
+			return nil, fmt.Errorf("unsupported platform: %s", target)
+		}
+		targetedArch[target] = option
+	}
+
+	return targetedArch, nil
 }
 
 func execCmd(cmd *exec.Cmd, dryRun bool) error {
@@ -59,7 +73,7 @@ func execCmd(cmd *exec.Cmd, dryRun bool) error {
 	output, err := cmd.CombinedOutput()
 
 	if len(output) != 0 {
-		log.Println(string(output))
+		fmt.Println(string(output))
 	}
 
 	if err != nil {

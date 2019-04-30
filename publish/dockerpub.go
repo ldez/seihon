@@ -17,7 +17,7 @@ type DockerPub struct {
 }
 
 // NewDockerPub Creates a new DockerPub.
-func NewDockerPub(imageName, version, baseImageName string, targets []string, dockerfileTemplate string) (*DockerPub, error) {
+func NewDockerPub(imageName, version, baseImageName string, targets map[string]ArchDescriptor, dockerfileTemplate string) (*DockerPub, error) {
 	manif, err := manifest.Get(baseImageName)
 	if err != nil {
 		return nil, err
@@ -25,12 +25,7 @@ func NewDockerPub(imageName, version, baseImageName string, targets []string, do
 
 	pub := &DockerPub{}
 
-	for _, target := range targets {
-		option, ok := buildOptions[target]
-		if !ok {
-			return nil, fmt.Errorf("unsupported platform: %s", target)
-		}
-
+	for target, option := range targets {
 		descriptor, err := manifest.FindManifestDescriptor(option.OS, option.GoARCH, option.Variant, manif)
 		if err != nil {
 			return nil, err
@@ -73,7 +68,7 @@ func (d DockerPub) Execute(dryRun bool) error {
 	return nil
 }
 
-func createDockerfile(dockerfile string, baseImageName string, option buildOption, digest digest.Digest, dockerfileTemplate string) error {
+func createDockerfile(dockerfile string, baseImageName string, option ArchDescriptor, digest digest.Digest, dockerfileTemplate string) error {
 	parse, err := template.New("tmpl.Dockerfile").ParseFiles(dockerfileTemplate)
 	if err != nil {
 		return err

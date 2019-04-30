@@ -88,7 +88,7 @@ func newPublishCmd() *cobra.Command {
 	}
 
 	flags := cmd.Flags()
-	flags.StringVar(&opts.imageName, "image-name", "ldez/traefik-certs-dumper", "Image name (user/repo)")
+	flags.StringVar(&opts.imageName, "image-name", "", "Image name (user/repo)")
 	flags.StringVar(&opts.version, "version", "", "Image version.")
 	flags.StringVar(&opts.dockerfileTemplate, "template", "./tmpl.Dockerfile", "Dockerfile template")
 	flags.StringVar(&opts.baseImageName, "base-image-name", "alpine:3.9", "Base Docker image.")
@@ -105,7 +105,12 @@ func requireString(fieldName string, cmd *cobra.Command) {
 }
 
 func run(opts cmdOpts) error {
-	dockerPub, err := publish.NewDockerPub(opts.imageName, version, opts.baseImageName, opts.targets, opts.dockerfileTemplate)
+	targetedArch, err := publish.GetTargetedArchitectures(opts.targets)
+	if err != nil {
+		return err
+	}
+
+	dockerPub, err := publish.NewDockerPub(opts.imageName, version, opts.baseImageName, targetedArch, opts.dockerfileTemplate)
 	if err != nil {
 		return err
 	}
@@ -115,7 +120,7 @@ func run(opts cmdOpts) error {
 		return err
 	}
 
-	manifestPub, err := publish.NewManifestPub(opts.imageName, version, opts.targets)
+	manifestPub, err := publish.NewManifestPub(opts.imageName, version, targetedArch)
 	if err != nil {
 		return err
 	}

@@ -16,7 +16,7 @@ seihon publish [flags]
       --base-image-name string   Base Docker image. (default "alpine:3.9")
       --dry-run                  Dry run mode. (default true)
   -h, --help                     help for publish
-      --image-name string        Image name (user/repo) (default "ldez/traefik-certs-dumper")
+      --image-name string        Image name (user/repo)
       --targets strings          Targeted architectures. (default [arm.v6,arm.v7,arm.v8,amd64,386])
       --template string          Dockerfile template (default "./tmpl.Dockerfile")
       --version string           Image version.

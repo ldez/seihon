@@ -13,15 +13,10 @@ type ManifestPub struct {
 }
 
 // NewManifestPub Creates a new ManifestPub.
-func NewManifestPub(imageName, version string, targets []string) (*ManifestPub, error) {
+func NewManifestPub(imageName, version string, targets map[string]ArchDescriptor) (*ManifestPub, error) {
 	pub := &ManifestPub{}
 
-	for _, target := range targets {
-		option, ok := buildOptions[target]
-		if !ok {
-			return nil, fmt.Errorf("unsupported platform: %s", target)
-		}
-
+	for target, option := range targets {
 		ma := []string{
 			"manifest", "annotate",
 			fmt.Sprintf("%s:%s", imageName, version),
@@ -39,7 +34,7 @@ func NewManifestPub(imageName, version string, targets []string) (*ManifestPub, 
 	}
 
 	mc := []string{"manifest", "create", "--amend", fmt.Sprintf("%s:%s", imageName, version)}
-	for _, target := range targets {
+	for target := range targets {
 		mc = append(mc, fmt.Sprintf("%s:%s-%s", imageName, version, target))
 	}
 	cmdMC := exec.Command("docker", mc...)
