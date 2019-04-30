@@ -12,8 +12,9 @@ import (
 
 // DockerPub Docker images builder and publisher.
 type DockerPub struct {
-	builds []*exec.Cmd
-	push   []*exec.Cmd
+	builds      []*exec.Cmd
+	push        []*exec.Cmd
+	dockerfiles []string
 }
 
 // NewDockerPub Creates a new DockerPub.
@@ -25,17 +26,18 @@ func NewDockerPub(imageName, version, baseImageName string, targets map[string]A
 
 	pub := &DockerPub{}
 
-	for target, option := range targets {
+	errB := orderlyBrowse(targets, func(target string, option ArchDescriptor) error {
 		descriptor, err := manifest.FindManifestDescriptor(option.OS, option.GoARCH, option.Variant, manif)
 		if err != nil {
-			return nil, err
+			return err
 		}
 
 		dockerfile := fmt.Sprintf("%s-%s-%s.Dockerfile", option.OS, option.GoARCH, option.GoARM)
+		pub.dockerfiles = append(pub.dockerfiles, dockerfile)
 
 		err = createDockerfile(dockerfile, baseImageName, option, descriptor.Digest, dockerfileTemplate)
 		if err != nil {
-			return nil, err
+			return err
 		}
 
 		dBuild := exec.Command("docker", "build",
@@ -46,6 +48,11 @@ func NewDockerPub(imageName, version, baseImageName string, targets map[string]A
 
 		dPush := exec.Command("docker", "push", fmt.Sprintf(`%s:%s-%s`, imageName, version, target))
 		pub.push = append(pub.push, dPush)
+
+		return nil
+	})
+	if errB != nil {
+		return nil, errB
 	}
 
 	return pub, nil
@@ -65,6 +72,20 @@ func (d DockerPub) Execute(dryRun bool) error {
 		}
 	}
 
+	return nil
+}
+
+// Clean Removes generated Dockerfile.
+func (d DockerPub) Clean(dryRun bool) error {
+	if dryRun {
+		return nil
+	}
+
+	for _, dockerfile := range d.dockerfiles {
+		if err := os.Remove(dockerfile); err != nil {
+			return err
+		}
+	}
 	return nil
 }
 

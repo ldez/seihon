@@ -9,14 +9,14 @@ BUILD_DATE := $(shell date -u '+%Y-%m-%d_%I:%M:%S%p')
 default: clean checks test build
 
 test: clean
-	go test -v -cover ./...
+	GO111MODULE=on go test -v -cover ./...
 
 clean:
 	rm -rf dist/ cover.out
 
 build: clean
 	@echo Version: $(VERSION) $(BUILD_DATE)
-	go build -v -ldflags '-X "main.version=${VERSION}" -X "main.commit=${SHA}" -X "main.date=${BUILD_DATE}"' -o seihon
+	GO111MODULE=on go build -v -ldflags '-X "main.version=${VERSION}" -X "main.commit=${SHA}" -X "main.date=${BUILD_DATE}"' -o seihon
 
 checks:
-	golangci-lint run
+	GO111MODULE=on golangci-lint run

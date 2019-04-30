@@ -120,6 +120,11 @@ func run(opts cmdOpts) error {
 		return err
 	}
 
+	err = dockerPub.Clean(opts.dryRun)
+	if err != nil {
+		return err
+	}
+
 	manifestPub, err := publish.NewManifestPub(opts.imageName, version, targetedArch)
 	if err != nil {
 		return err

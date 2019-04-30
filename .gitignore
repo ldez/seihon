@@ -1,5 +1,5 @@
 .idea/
 vendor/
-/linux-*.Dockerfile
+linux-*.Dockerfile
 manifest.json
 seihon

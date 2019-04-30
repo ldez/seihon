@@ -16,7 +16,7 @@ type ManifestPub struct {
 func NewManifestPub(imageName, version string, targets map[string]ArchDescriptor) (*ManifestPub, error) {
 	pub := &ManifestPub{}
 
-	for target, option := range targets {
+	_ = orderlyBrowse(targets, func(target string, option ArchDescriptor) error {
 		ma := []string{
 			"manifest", "annotate",
 			fmt.Sprintf("%s:%s", imageName, version),
@@ -31,12 +31,16 @@ func NewManifestPub(imageName, version string, targets map[string]ArchDescriptor
 		cmdMA := exec.Command("docker", ma...)
 		cmdMA.Env = append(cmdMA.Env, envDockerExperimental)
 		pub.manifestAnnotate = append(pub.manifestAnnotate, cmdMA)
-	}
+
+		return nil
+	})
 
 	mc := []string{"manifest", "create", "--amend", fmt.Sprintf("%s:%s", imageName, version)}
-	for target := range targets {
+	_ = orderlyBrowse(targets, func(target string, option ArchDescriptor) error {
 		mc = append(mc, fmt.Sprintf("%s:%s-%s", imageName, version, target))
-	}
+		return nil
+	})
+
 	cmdMC := exec.Command("docker", mc...)
 	cmdMC.Env = append(cmdMC.Env, envDockerExperimental)
 	pub.manifestCreate = cmdMC

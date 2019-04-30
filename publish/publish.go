@@ -3,6 +3,7 @@ package publish
 import (
 	"fmt"
 	"os/exec"
+	"sort"
 	"strings"
 )
 
@@ -42,7 +43,7 @@ var availableArchitectures = map[string]ArchDescriptor{
 	},
 }
 
-// ArchDescriptor A descriptor for an architecture.
+// ArchDescriptor An architecture descriptor for an architecture.
 type ArchDescriptor struct {
 	OS      string `json:"os"`
 	GoARCH  string `json:"go_arch"`
@@ -50,6 +51,7 @@ type ArchDescriptor struct {
 	Variant string `json:"variant,omitempty"`
 }
 
+// GetTargetedArchitectures Gets architecture descriptors.
 func GetTargetedArchitectures(targets []string) (map[string]ArchDescriptor, error) {
 	targetedArch := make(map[string]ArchDescriptor)
 
@@ -64,9 +66,28 @@ func GetTargetedArchitectures(targets []string) (map[string]ArchDescriptor, erro
 	return targetedArch, nil
 }
 
+func orderlyBrowse(targets map[string]ArchDescriptor, apply func(string, ArchDescriptor) error) error {
+	var keys []string
+
+	for target := range targets {
+		keys = append(keys, target)
+	}
+
+	sort.Strings(keys)
+
+	for _, key := range keys {
+		err := apply(key, targets[key])
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
 func execCmd(cmd *exec.Cmd, dryRun bool) error {
 	if dryRun {
-		fmt.Println(cmd.Path, strings.Join(cmd.Args, " "))
+		fmt.Println(strings.Join(cmd.Args, " "))
 		return nil
 	}
 
