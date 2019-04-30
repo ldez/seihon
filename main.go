@@ -110,7 +110,7 @@ func run(opts cmdOpts) error {
 		return err
 	}
 
-	dockerPub, err := publish.NewDockerPub(opts.imageName, version, opts.baseImageName, targetedArch, opts.dockerfileTemplate)
+	dockerPub, err := publish.NewDockerPub(opts.imageName, opts.version, opts.baseImageName, targetedArch, opts.dockerfileTemplate)
 	if err != nil {
 		return err
 	}
@@ -125,7 +125,7 @@ func run(opts cmdOpts) error {
 		return err
 	}
 
-	manifestPub, err := publish.NewManifestPub(opts.imageName, version, targetedArch)
+	manifestPub, err := publish.NewManifestPub(opts.imageName, opts.version, targetedArch)
 	if err != nil {
 		return err
 	}
