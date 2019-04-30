@@ -71,6 +71,11 @@ func newPublishCmd() *cobra.Command {
 			requireString("base-image-name", cmd)
 			requireString("template", cmd)
 
+			if opts.dryRun {
+				fmt.Println("IMPORTANT: you are using the dry-run mode. Use `--dry-run=false` to disable this mode.")
+			}
+
+			// TODO add an option?
 			// _, travisTag := os.LookupEnv("TRAVIS_TAG")
 			// if !travisTag {
 			// 	log.Println("Skipping deploy")
