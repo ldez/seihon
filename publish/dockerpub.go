@@ -18,8 +18,8 @@ type DockerPub struct {
 }
 
 // NewDockerPub Creates a new DockerPub.
-func NewDockerPub(imageName, version, baseImageName string, targets map[string]ArchDescriptor, dockerfileTemplate string) (*DockerPub, error) {
-	manif, err := manifest.Get(baseImageName)
+func NewDockerPub(imageName, version, baseRuntimeImage string, targets map[string]ArchDescriptor, dockerfileTemplate string) (*DockerPub, error) {
+	manif, err := manifest.Get(baseRuntimeImage)
 	if err != nil {
 		return nil, err
 	}
@@ -35,7 +35,7 @@ func NewDockerPub(imageName, version, baseImageName string, targets map[string]A
 		dockerfile := fmt.Sprintf("%s-%s-%s.Dockerfile", option.OS, option.GoARCH, option.GoARM)
 		pub.dockerfiles = append(pub.dockerfiles, dockerfile)
 
-		err = createDockerfile(dockerfile, baseImageName, option, descriptor.Digest, dockerfileTemplate)
+		err = createDockerfile(dockerfile, baseRuntimeImage, option, descriptor.Digest, dockerfileTemplate)
 		if err != nil {
 			return err
 		}
@@ -89,7 +89,7 @@ func (d DockerPub) Clean(dryRun bool) error {
 	return nil
 }
 
-func createDockerfile(dockerfile string, baseImageName string, option ArchDescriptor, digest digest.Digest, dockerfileTemplate string) error {
+func createDockerfile(dockerfile string, baseRuntimeImage string, option ArchDescriptor, digest digest.Digest, dockerfileTemplate string) error {
 	parse, err := template.New("tmpl.Dockerfile").ParseFiles(dockerfileTemplate)
 	if err != nil {
 		return err
@@ -99,7 +99,7 @@ func createDockerfile(dockerfile string, baseImageName string, option ArchDescri
 		"GoOS":         option.OS,
 		"GoARCH":       option.GoARCH,
 		"GoARM":        option.GoARM,
-		"RuntimeImage": fmt.Sprintf("%s@%s", baseImageName, digest),
+		"RuntimeImage": fmt.Sprintf("%s@%s", baseRuntimeImage, digest),
 	}
 
 	file, err := os.Create(dockerfile)

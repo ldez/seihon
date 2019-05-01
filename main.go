@@ -15,7 +15,7 @@ import (
 type cmdOpts struct {
 	imageName          string
 	version            string
-	baseImageName      string
+	baseRuntimeImage   string
 	targets            []string
 	dockerfileTemplate string
 	dryRun             bool
@@ -94,7 +94,7 @@ func newPublishCmd() *cobra.Command {
 	flags.StringVar(&opts.imageName, "image-name", "", "Image name (user/repo)")
 	flags.StringVar(&opts.version, "version", "", "Image version.")
 	flags.StringVar(&opts.dockerfileTemplate, "template", "./tmpl.Dockerfile", "Dockerfile template")
-	flags.StringVar(&opts.baseImageName, "base-image-name", "alpine:3.9", "Base Docker image.")
+	flags.StringVar(&opts.baseRuntimeImage, "base-runtime-image", "alpine:3.9", "Base Docker image.")
 	flags.StringSliceVar(&opts.targets, "targets", []string{"arm.v6", "arm.v7", "arm.v8", "amd64", "386"}, "Targeted architectures.")
 	flags.BoolVar(&opts.dryRun, "dry-run", true, "Dry run mode.")
 
@@ -107,7 +107,7 @@ func run(opts cmdOpts) error {
 		return err
 	}
 
-	dockerPub, err := publish.NewDockerPub(opts.imageName, opts.version, opts.baseImageName, targetedArch, opts.dockerfileTemplate)
+	dockerPub, err := publish.NewDockerPub(opts.imageName, opts.version, opts.baseRuntimeImage, targetedArch, opts.dockerfileTemplate)
 	if err != nil {
 		return err
 	}
