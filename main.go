@@ -4,10 +4,12 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"strings"
 
 	"github.com/ldez/seihon/publish"
 	"github.com/spf13/cobra"
 	"github.com/spf13/cobra/doc"
+	"github.com/spf13/pflag"
 )
 
 type cmdOpts struct {
@@ -65,11 +67,10 @@ func newPublishCmd() *cobra.Command {
 		Use:   "publish",
 		Short: "Build and publish multi-arch Docker image.",
 		Long:  `Build and publish multi-arch Docker image.`,
-		PreRun: func(cmd *cobra.Command, args []string) {
-			requireString("image-name", cmd)
-			requireString("version", cmd)
-			requireString("base-image-name", cmd)
-			requireString("template", cmd)
+		PreRunE: func(cmd *cobra.Command, args []string) error {
+			if err := validateRequiredFlags(cmd); err != nil {
+				return err
+			}
 
 			if opts.dryRun {
 				fmt.Println("IMPORTANT: you are using the dry-run mode. Use `--dry-run=false` to disable this mode.")
@@ -81,6 +82,8 @@ func newPublishCmd() *cobra.Command {
 			// 	log.Println("Skipping deploy")
 			// 	os.Exit(0)
 			// }
+
+			return nil
 		},
 		RunE: func(cmd *cobra.Command, _ []string) error {
 			return run(opts)
@@ -98,12 +101,6 @@ func newPublishCmd() *cobra.Command {
 	return cmd
 }
 
-func requireString(fieldName string, cmd *cobra.Command) {
-	if cmd.Flag(fieldName) == nil || cmd.Flag(fieldName).Value.String() == "" {
-		log.Fatalf("%s is required", fieldName)
-	}
-}
-
 func run(opts cmdOpts) error {
 	targetedArch, err := publish.GetTargetedArchitectures(opts.targets)
 	if err != nil {
@@ -115,8 +112,7 @@ func run(opts cmdOpts) error {
 		return err
 	}
 
-	err = dockerPub.Execute(opts.dryRun)
-	if err != nil {
+	if err = dockerPub.Execute(opts.dryRun); err != nil {
 		return err
 	}
 
@@ -131,4 +127,29 @@ func run(opts cmdOpts) error {
 	}
 
 	return manifestPub.Execute(opts.dryRun)
+}
+
+func validateRequiredFlags(cmd *cobra.Command) error {
+	var missingFlagNames []string
+
+	flags := cmd.Flags()
+	flags.
+		VisitAll(func(pflag *pflag.Flag) {
+			switch pflag.Value.Type() {
+			case "string":
+				if len(pflag.Value.String()) == 0 {
+					missingFlagNames = append(missingFlagNames, pflag.Name)
+				}
+			case "stringSlice":
+				slice, _ := flags.GetStringSlice(pflag.Name)
+				if len(slice) == 0 {
+					missingFlagNames = append(missingFlagNames, pflag.Name)
+				}
+			}
+		})
+
+	if len(missingFlagNames) > 0 {
+		return fmt.Errorf(`required flag(s) "%s" not set`, strings.Join(missingFlagNames, `", "`))
+	}
+	return nil
 }
