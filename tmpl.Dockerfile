@@ -21,4 +21,4 @@ FROM {{ .RuntimeImage }}
 COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 COPY --from=builder /go/src/github.com/ldez/seihon/seihon /usr/bin/seihon
 
-ENTRYPOINT ["/usr/bin/traefik-certs-dumper"]
+ENTRYPOINT ["/usr/bin/seihon"]
