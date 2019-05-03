@@ -2,6 +2,7 @@ package publish
 
 import (
 	"fmt"
+	"os"
 	"os/exec"
 	"sort"
 	"strings"
@@ -86,6 +87,7 @@ func orderlyBrowse(targets map[string]ArchDescriptor, apply func(string, ArchDes
 }
 
 func execCmd(cmd *exec.Cmd, dryRun bool) error {
+	cmd.Env = append(os.Environ(), envDockerExperimental)
 	if dryRun {
 		fmt.Println(strings.Join(cmd.Args, " "))
 		return nil

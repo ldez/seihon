@@ -29,7 +29,6 @@ func NewManifestPub(imageName, version string, targets map[string]ArchDescriptor
 		}
 
 		cmdMA := exec.Command("docker", ma...)
-		cmdMA.Env = append(cmdMA.Env, envDockerExperimental)
 		pub.manifestAnnotate = append(pub.manifestAnnotate, cmdMA)
 
 		return nil
@@ -42,11 +41,9 @@ func NewManifestPub(imageName, version string, targets map[string]ArchDescriptor
 	})
 
 	cmdMC := exec.Command("docker", mc...)
-	cmdMC.Env = append(cmdMC.Env, envDockerExperimental)
 	pub.manifestCreate = cmdMC
 
 	cmdMP := exec.Command("docker", "manifest", "push", fmt.Sprintf("%s:%s", imageName, version))
-	cmdMP.Env = append(cmdMP.Env, envDockerExperimental)
 	pub.manifestPush = cmdMP
 
 	return pub, nil

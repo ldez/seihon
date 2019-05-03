@@ -53,7 +53,7 @@ func Get(baseImageName string) (*manifestlist.ManifestList, error) {
 
 func inspect(baseImageName, manifestPath string) error {
 	cmd := exec.Command("docker", "manifest", "inspect", baseImageName)
-	cmd.Env = append(cmd.Env, "DOCKER_CLI_EXPERIMENTAL=enabled")
+	cmd.Env = append(os.Environ(), "DOCKER_CLI_EXPERIMENTAL=enabled")
 
 	output, err := cmd.CombinedOutput()
 	if err != nil {
