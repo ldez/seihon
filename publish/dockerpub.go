@@ -18,7 +18,8 @@ type DockerPub struct {
 }
 
 // NewDockerPub Creates a new DockerPub.
-func NewDockerPub(imageName, version, baseRuntimeImage string, targets map[string]ArchDescriptor, dockerfileTemplate string) (*DockerPub, error) {
+func NewDockerPub(imageName string, versions []string, baseRuntimeImage string, targets map[string]ArchDescriptor, dockerfileTemplate string) (*DockerPub, error) {
+
 	manif, err := manifest.Get(baseRuntimeImage)
 	if err != nil {
 		return nil, err
@@ -40,14 +41,19 @@ func NewDockerPub(imageName, version, baseRuntimeImage string, targets map[strin
 			return err
 		}
 
-		dBuild := exec.Command("docker", "build",
-			"-t", fmt.Sprintf("%s:%s-%s", imageName, version, target),
-			"-f", dockerfile,
-			".")
+		args := []string{"build"}
+		for _, v := range versions {
+			args = append(args, "-t", fmt.Sprintf("%s:%s-%s", imageName, v, target))
+		}
+		args = append(args, "-f", dockerfile, ".")
+
+		dBuild := exec.Command("docker", args...)
 		pub.builds = append(pub.builds, dBuild)
 
-		dPush := exec.Command("docker", "push", fmt.Sprintf(`%s:%s-%s`, imageName, version, target))
-		pub.push = append(pub.push, dPush)
+		for _, v := range versions {
+			dPush := exec.Command("docker", "push", fmt.Sprintf(`%s:%s-%s`, imageName, v, target))
+			pub.push = append(pub.push, dPush)
+		}
 
 		return nil
 	})

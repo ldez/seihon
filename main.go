@@ -14,7 +14,7 @@ import (
 
 type cmdOpts struct {
 	imageName          string
-	version            string
+	versions           []string
 	baseRuntimeImage   string
 	targets            []string
 	dockerfileTemplate string
@@ -92,7 +92,7 @@ func newPublishCmd() *cobra.Command {
 
 	flags := cmd.Flags()
 	flags.StringVar(&opts.imageName, "image-name", "", "Image name (user/repo)")
-	flags.StringVar(&opts.version, "version", "", "Image version.")
+	flags.StringSliceVarP(&opts.versions, "versions", "v", nil, "Image version.")
 	flags.StringVar(&opts.dockerfileTemplate, "template", "./tmpl.Dockerfile", "Dockerfile template")
 	flags.StringVar(&opts.baseRuntimeImage, "base-runtime-image", "alpine:3.9", "Base Docker image.")
 	flags.StringSliceVar(&opts.targets, "targets", []string{"arm.v6", "arm.v7", "arm.v8", "amd64", "386"}, "Targeted architectures.")
@@ -107,7 +107,7 @@ func run(opts cmdOpts) error {
 		return err
 	}
 
-	dockerPub, err := publish.NewDockerPub(opts.imageName, opts.version, opts.baseRuntimeImage, targetedArch, opts.dockerfileTemplate)
+	dockerPub, err := publish.NewDockerPub(opts.imageName, opts.versions, opts.baseRuntimeImage, targetedArch, opts.dockerfileTemplate)
 	if err != nil {
 		return err
 	}
@@ -121,12 +121,18 @@ func run(opts cmdOpts) error {
 		return err
 	}
 
-	manifestPub, err := publish.NewManifestPub(opts.imageName, opts.version, targetedArch)
-	if err != nil {
-		return err
+	for _, version := range opts.versions {
+		manifestPub, err := publish.NewManifestPub(opts.imageName, version, targetedArch)
+		if err != nil {
+			return err
+		}
+
+		if err = manifestPub.Execute(opts.dryRun); err != nil {
+			return err
+		}
 	}
 
-	return manifestPub.Execute(opts.dryRun)
+	return nil
 }
 
 func validateRequiredFlags(cmd *cobra.Command) error {
