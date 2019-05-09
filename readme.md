@@ -32,6 +32,26 @@ godownloader --repo=ldez/seihon > godownloader.sh
 ```
 -->
 
+### From a package manager
+
+- [ArchLinux (AUR)](https://aur.archlinux.org/packages/seihon/):
+```bash
+yay -S seihon
+```
+
+- [Homebrew Taps](https://github.com/ldez/homebrew-tap)
+```bash
+brew tap ldez/tap
+brew update
+brew install seihon
+```
+
+- [Scoop Bucket](https://github.com/ldez/scoop-bucket)
+```bash
+scoop bucket add seihon https://github.com/ldez/scoop-bucket.git
+scoop install seihon
+```
+
 ### From Binaries
 
 You can use pre-compiled binaries:
@@ -39,7 +59,6 @@ You can use pre-compiled binaries:
 * To get the binary just download the latest release for your OS/Arch from [the releases page](https://github.com/ldez/seihon/releases/)
 * Unzip the archive.
 * Add `seihon` in your `PATH`.
-
 
 ## Usage
 

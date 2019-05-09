@@ -32,5 +32,29 @@ archive:
   files:
     - LICENSE
 
+brew:
+  github:
+    owner: ldez
+    name: homebrew-tap
+  commit_author:
+    name: ldez
+    email: ldez@users.noreply.github.com
+  folder: Formula
+  homepage: https://github.com/ldez/seihon
+  description: A simple tool to publish multi-arch images on the Docker Hub.
+  test: |
+    system "#{bin}/seihon version"
+
+scoop:
+  bucket:
+    owner: ldez
+    name: scoop-bucket
+  commit_author:
+    name: ldez
+    email: ldez@users.noreply.github.com
+  homepage: https://github.com/ldez/seihon
+  description: A simple tool to publish multi-arch images on the Docker Hub.
+  license: APACHE
+
 #release:
 #  disable: true
