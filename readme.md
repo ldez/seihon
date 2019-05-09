@@ -46,12 +46,6 @@ brew update
 brew install seihon
 ```
 
-- [Scoop Bucket](https://github.com/ldez/scoop-bucket)
-```bash
-scoop bucket add seihon https://github.com/ldez/scoop-bucket.git
-scoop install seihon
-```
-
 ### From Binaries
 
 You can use pre-compiled binaries:
