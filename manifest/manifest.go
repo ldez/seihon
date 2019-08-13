@@ -22,7 +22,7 @@ func FindManifestDescriptor(os, arch, variant string, list *manifestlist.Manifes
 		}
 	}
 
-	return manifestlist.ManifestDescriptor{}, fmt.Errorf("architecure not found in manifest: %s %s %s", os, arch, variant)
+	return manifestlist.ManifestDescriptor{}, fmt.Errorf("architecture not found in manifest: %s %s %s", os, arch, variant)
 }
 
 // Get Gets the manifest of the baseImage.
