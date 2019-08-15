@@ -6,10 +6,13 @@ notifications:
     on_success: never
     on_failure: change
 
+cache:
+  directories:
+    - $GOPATH/pkg/mod
+
 matrix:
   fast_finish: true
   include:
-    - go: 1.11.x
     - go: 1.12.x
       env: STABLE=true
     - go: 1.x
@@ -27,7 +30,9 @@ before_install:
   - golangci-lint --version
 
 install:
-  - echo "TRAVIS_GO_VERSION=$TRAVIS_GO_VERSION"
+  - go mod tidy
+  - git diff --exit-code go.mod
+  - git diff --exit-code go.sum
   - go mod download
 
 deploy:

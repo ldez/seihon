@@ -3,3 +3,4 @@ vendor/
 linux-*.Dockerfile
 manifest.json
 seihon
+dist/
