@@ -8,5 +8,5 @@ require (
 	github.com/opencontainers/image-spec v1.0.2-0.20190321123305-da296dcb1e47 // indirect
 	github.com/spf13/cobra v0.0.5
 	github.com/spf13/pflag v1.0.3
-	github.com/stretchr/testify v1.3.0
+	github.com/stretchr/testify v1.4.0
 )
