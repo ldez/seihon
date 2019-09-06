@@ -12,6 +12,11 @@ If you appreciate this project:
 
 ![image](docs/img.png)
 
+## Usage
+
+- [seihon](docs/seihon.md)
+- [seihon publish](docs/seihon_publish.md)
+
 ## Installation
 
 ### Download / CI Integration
@@ -53,11 +58,6 @@ You can use pre-compiled binaries:
 * To get the binary just download the latest release for your OS/Arch from [the releases page](https://github.com/ldez/seihon/releases/)
 * Unzip the archive.
 * Add `seihon` in your `PATH`.
-
-## Usage
-
-- [seihon](docs/seihon.md)
-- [seihon publish](docs/seihon_publish.md)
 
 ## Tips
 
