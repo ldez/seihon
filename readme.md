@@ -17,7 +17,7 @@ If you appreciate this project:
 ### Download / CI Integration
 
 ```bash
-curl -sfL https://raw.githubusercontent.com/ldez/seihon/master/godownloader.sh | bash -s -- -b $GOPATH/bin v0.4.0
+curl -sfL https://raw.githubusercontent.com/ldez/seihon/master/godownloader.sh | bash -s -- -b $GOPATH/bin v0.4.3
 ```
 
 <!--
@@ -58,3 +58,23 @@ You can use pre-compiled binaries:
 
 - [seihon](docs/seihon.md)
 - [seihon publish](docs/seihon_publish.md)
+
+## Tips
+
+- on Travis:
+
+```bash
+before_deploy:
+  # Install Docker image multi-arch builder
+  - curl -sfL https://raw.githubusercontent.com/ldez/seihon/master/godownloader.sh | bash -s -- -b "${GOPATH}/bin" ${SEIHON_VERSION}
+  - seihon --version
+  # Add QEMU only for some specific cases.
+  - docker run --rm --privileged hypriot/qemu-register
+
+deploy:
+  - provider: script
+    skip_cleanup: true
+    script: seihon publish <your configuration>
+    on:
+      tags: true
+```
