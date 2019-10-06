@@ -1,3 +1,4 @@
+// Package publish Docker manifest and images publisher.
 package publish
 
 import (

@@ -19,7 +19,6 @@ type DockerPub struct {
 
 // NewDockerPub Creates a new DockerPub.
 func NewDockerPub(imageName string, versions []string, baseRuntimeImage string, targets map[string]ArchDescriptor, dockerfileTemplate string) (*DockerPub, error) {
-
 	manif, err := manifest.Get(baseRuntimeImage)
 	if err != nil {
 		return nil, err

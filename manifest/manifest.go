@@ -1,3 +1,4 @@
+// Package manifest contains functions related the the Docker image manifest.
 package manifest
 
 import (
