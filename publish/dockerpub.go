@@ -91,6 +91,7 @@ func (d DockerPub) Clean(dryRun bool) error {
 			return err
 		}
 	}
+
 	return nil
 }
 

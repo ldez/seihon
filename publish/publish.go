@@ -62,6 +62,7 @@ func GetTargetedArchitectures(targets []string) (map[string]ArchDescriptor, erro
 		if !ok {
 			return nil, fmt.Errorf("unsupported platform: %s", target)
 		}
+
 		targetedArch[target] = option
 	}
 
@@ -89,6 +90,7 @@ func orderlyBrowse(targets map[string]ArchDescriptor, apply func(string, ArchDes
 
 func execCmd(cmd *exec.Cmd, dryRun bool) error {
 	cmd.Env = append(os.Environ(), envDockerExperimental)
+
 	if dryRun {
 		fmt.Println(strings.Join(cmd.Args, " "))
 		return nil
