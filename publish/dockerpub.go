@@ -67,13 +67,13 @@ func NewDockerPub(imageName string, versions []string, baseRuntimeImage string, 
 func (d DockerPub) Execute(dryRun bool) error {
 	for _, cmd := range d.builds {
 		if err := execCmd(cmd, dryRun); err != nil {
-			return fmt.Errorf("failed to build: %v: %v", cmd, err)
+			return fmt.Errorf("failed to build: %v: %w", cmd, err)
 		}
 	}
 
 	for _, cmd := range d.push {
 		if err := execCmd(cmd, dryRun); err != nil {
-			return fmt.Errorf("failed to push: %v: %v", cmd, err)
+			return fmt.Errorf("failed to push: %v: %w", cmd, err)
 		}
 	}
 

@@ -52,17 +52,17 @@ func NewManifestPub(imageName, version string, targets map[string]ArchDescriptor
 // Execute Executes commands.
 func (m ManifestPub) Execute(dryRun bool) error {
 	if err := execCmd(m.manifestCreate, dryRun); err != nil {
-		return fmt.Errorf("failed to create manifest: %v: %v", m.manifestCreate, err)
+		return fmt.Errorf("failed to create manifest: %v: %w", m.manifestCreate, err)
 	}
 
 	for _, cmd := range m.manifestAnnotate {
 		if err := execCmd(cmd, dryRun); err != nil {
-			return fmt.Errorf("failed to annotate manifest: %v: %v", cmd, err)
+			return fmt.Errorf("failed to annotate manifest: %v: %w", cmd, err)
 		}
 	}
 
 	if err := execCmd(m.manifestPush, dryRun); err != nil {
-		return fmt.Errorf("failed to push manifest: %v: %v", m.manifestPush, err)
+		return fmt.Errorf("failed to push manifest: %v: %w", m.manifestPush, err)
 	}
 
 	return nil

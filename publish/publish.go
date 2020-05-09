@@ -105,5 +105,6 @@ func execCmd(cmd *exec.Cmd, dryRun bool) error {
 	if err != nil {
 		return err
 	}
+
 	return nil
 }
