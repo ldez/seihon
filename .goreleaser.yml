@@ -42,7 +42,7 @@ brews:
       email: ldez@users.noreply.github.com
     folder: Formula
     homepage: https://github.com/ldez/seihon
-    description: A simple tool to publish multi-arch images on the Docker Hub.
+    description: Simple tool to publish multi-arch images on the Docker Hub
     test: |
       system "#{bin}/seihon version"
 
