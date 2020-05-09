@@ -43,7 +43,7 @@ func NewManifestPub(imageName, version string, targets map[string]ArchDescriptor
 	cmdMC := exec.Command("docker", mc...)
 	pub.manifestCreate = cmdMC
 
-	cmdMP := exec.Command("docker", "manifest", "push", fmt.Sprintf("%s:%s", imageName, version))
+	cmdMP := exec.Command("docker", "manifest", "push", "--purge", fmt.Sprintf("%s:%s", imageName, version))
 	pub.manifestPush = cmdMP
 
 	return pub, nil
