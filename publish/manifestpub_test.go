@@ -33,7 +33,7 @@ func TestNewManifestPub(t *testing.T) {
 		"image:v666-arm.v8",
 	}, pub.manifestCreate.Args)
 
-	assert.Equal(t, strings.Split("docker manifest push image:v666", " "), pub.manifestPush.Args)
+	assert.Equal(t, strings.Split("docker manifest push --purge image:v666", " "), pub.manifestPush.Args)
 }
 
 func TestManifestPub_Execute(t *testing.T) {
@@ -68,6 +68,6 @@ docker manifest annotate image:v666 image:v666-arm.v5 --os=linux --arch=arm --va
 docker manifest annotate image:v666 image:v666-arm.v6 --os=linux --arch=arm --variant=v6
 docker manifest annotate image:v666 image:v666-arm.v7 --os=linux --arch=arm --variant=v7
 docker manifest annotate image:v666 image:v666-arm.v8 --os=linux --arch=arm64 --variant=v8
-docker manifest push image:v666
+docker manifest push --purge image:v666
 `, string(out))
 }
