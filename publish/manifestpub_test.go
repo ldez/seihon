@@ -23,7 +23,8 @@ func TestNewManifestPub(t *testing.T) {
 	assert.Equal(t, strings.Split("docker manifest annotate image:v666 image:v666-arm.v7 --os=linux --arch=arm --variant=v7", " "), pub.manifestAnnotate[4].Args)
 	assert.Equal(t, strings.Split("docker manifest annotate image:v666 image:v666-arm.v8 --os=linux --arch=arm64 --variant=v8", " "), pub.manifestAnnotate[5].Args)
 
-	assert.Equal(t, []string{"docker", "manifest", "create", "--amend",
+	assert.Equal(t, []string{
+		"docker", "manifest", "create", "--amend",
 		"image:v666",
 		"image:v666-386",
 		"image:v666-amd64",
