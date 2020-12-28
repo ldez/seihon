@@ -39,6 +39,8 @@
     "wrapcheck",
     "exhaustive",
     "exhaustivestruct",
+    "makezero",
+    "forbidigo",
   ]
 
 [issues]
