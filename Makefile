@@ -1,4 +1,4 @@
-.PHONY: default clean checks test build
+.PHONY: default clean checks test build generate-docs
 
 export GO111MODULE=on
 
@@ -22,3 +22,6 @@ build: clean
 
 checks:
 	golangci-lint run
+
+generate-docs:
+	go run . doc
