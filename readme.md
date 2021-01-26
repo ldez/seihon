@@ -61,12 +61,42 @@ You can use pre-compiled binaries:
 
 ## Tips
 
-- on Travis:
+- GitHub Actions:
 
-```bash
+```yaml
+name: Example
+
+# ...
+
+jobs:
+
+  main:
+    # ...
+    env:
+      # ...
+      SEIHON_VERSION: v0.7.1
+
+    steps:
+      # ...
+      
+      # Install Docker image multi-arch builder
+      - name: Install Seihon ${{ env.SEIHON_VERSION }}
+        #if: startsWith(github.ref, 'refs/tags/v')
+        run: |
+          curl -sSfL https://raw.githubusercontent.com/ldez/seihon/master/godownloader.sh | sh -s -- -b $(go env GOPATH)/bin ${SEIHON_VERSION}
+          seihon --version
+
+      - name: Publish Docker Images (Seihon)
+        #if: startsWith(github.ref, 'refs/tags/v')
+        run: make publish-images
+```
+
+- Travis CI:
+
+```yaml
 before_deploy:
   # Install Docker image multi-arch builder
-  - curl -sfL https://raw.githubusercontent.com/ldez/seihon/master/godownloader.sh | bash -s -- -b "${GOPATH}/bin" ${SEIHON_VERSION}
+  - curl -sfL https://raw.githubusercontent.com/ldez/seihon/master/godownloader.sh | bash -s -- -b $(go env GOPATH)/bin ${SEIHON_VERSION}
   - seihon --version
   # Add QEMU only for some specific cases.
   - docker run --rm --privileged hypriot/qemu-register
