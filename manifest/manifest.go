@@ -4,7 +4,6 @@ package manifest
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"os"
 	"os/exec"
 
@@ -37,7 +36,7 @@ func Get(baseImageName string) (*manifestlist.ManifestList, error) {
 		return nil, errExist
 	}
 
-	bytes, err := ioutil.ReadFile(manifestPath)
+	bytes, err := os.ReadFile(manifestPath)
 	if err != nil {
 		return nil, err
 	}
@@ -64,5 +63,5 @@ func inspect(baseImageName, manifestPath string) error {
 		return err
 	}
 
-	return ioutil.WriteFile(manifestPath, output, 0666)
+	return os.WriteFile(manifestPath, output, 0666)
 }

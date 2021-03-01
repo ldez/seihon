@@ -1,7 +1,7 @@
 package publish
 
 import (
-	"io/ioutil"
+	"io"
 	"os"
 	"strings"
 	"testing"
@@ -55,7 +55,7 @@ func TestManifestPub_Execute(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	out, err := ioutil.ReadAll(r)
+	out, err := io.ReadAll(r)
 	if err != nil {
 		t.Fatal(err)
 	}
