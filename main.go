@@ -143,7 +143,7 @@ func validateRequiredFlags(cmd *cobra.Command) error {
 		VisitAll(func(pflag *pflag.Flag) {
 			switch pflag.Value.Type() {
 			case "string":
-				if len(pflag.Value.String()) == 0 {
+				if pflag.Value.String() == "" {
 					missingFlagNames = append(missingFlagNames, pflag.Name)
 				}
 			case "stringSlice":

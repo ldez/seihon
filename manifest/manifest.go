@@ -13,16 +13,16 @@ import (
 const manifestPath = "./manifest.json"
 
 // FindManifestDescriptor Finds manifest.
-func FindManifestDescriptor(os, arch, variant string, list *manifestlist.ManifestList) (manifestlist.ManifestDescriptor, error) {
+func FindManifestDescriptor(pOS, arch, variant string, list *manifestlist.ManifestList) (manifestlist.ManifestDescriptor, error) {
 	for _, descriptor := range list.Manifests {
-		if descriptor.Platform.OS == os &&
+		if descriptor.Platform.OS == pOS &&
 			descriptor.Platform.Architecture == arch &&
 			descriptor.Platform.Variant == variant {
 			return descriptor, nil
 		}
 	}
 
-	return manifestlist.ManifestDescriptor{}, fmt.Errorf("architecture not found in manifest: %s %s %s", os, arch, variant)
+	return manifestlist.ManifestDescriptor{}, fmt.Errorf("architecture not found in manifest: %s %s %s", pOS, arch, variant)
 }
 
 // Get Gets the manifest of the baseImage.

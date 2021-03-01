@@ -96,7 +96,7 @@ func (d DockerPub) Clean(dryRun bool) error {
 	return nil
 }
 
-func createDockerfile(dockerfile string, baseRuntimeImage string, option ArchDescriptor, digest digest.Digest, dockerfileTemplate string) error {
+func createDockerfile(dockerfile, baseRuntimeImage string, option ArchDescriptor, objDigest digest.Digest, dockerfileTemplate string) error {
 	parse, err := template.New("tmpl.Dockerfile").
 		Funcs(sprig.FuncMap()).
 		ParseFiles(dockerfileTemplate)
@@ -108,7 +108,7 @@ func createDockerfile(dockerfile string, baseRuntimeImage string, option ArchDes
 		"GoOS":         option.OS,
 		"GoARCH":       option.GoARCH,
 		"GoARM":        option.GoARM,
-		"RuntimeImage": fmt.Sprintf("%s@%s", baseRuntimeImage, digest),
+		"RuntimeImage": fmt.Sprintf("%s@%s", baseRuntimeImage, objDigest),
 	}
 
 	file, err := os.Create(dockerfile)

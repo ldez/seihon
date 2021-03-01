@@ -1,0 +1,81 @@
+run:
+  deadline: 2m
+  skip-files: []
+
+linters-settings:
+  govet:
+    enable-all: true
+  gocyclo:
+    min-complexity: 12
+  goconst:
+    min-len: 3
+    min-occurrences: 3
+  misspell:
+    locale: US
+  gofumpt:
+    extra-rules: true
+  depguard:
+    list-type: blacklist
+    include-go-root: false
+    packages:
+      - github.com/pkg/errors
+  godox:
+    keywords:
+      - FIXME
+  gocritic:
+    enabled-tags:
+      - diagnostic
+      - style
+      - performance
+    disabled-checks:
+      - sloppyReassign
+      - rangeValCopy
+      - octalLiteral
+      - paramTypeCombine # already handle by gofumpt.extra-rules
+    settings:
+      hugeParam:
+        sizeThreshold: 100
+  forbidigo:
+    forbid:
+      - '^print(ln)?$'
+      - '^panic$'
+      - '^spew\.Print(f|ln)?$'
+      - '^spew\.Dump$'
+
+linters:
+  enable-all: true
+  disable:
+    - maligned # deprecated
+    - interfacer # deprecated
+    - sqlclosecheck # not relevant (SQL)
+    - rowserrcheck # not relevant (SQL)
+    - cyclop # duplicate of gocyclo
+    - lll
+    - dupl
+    - prealloc
+    - bodyclose
+    - wsl
+    - nlreturn
+    - gomnd
+    - testpackage
+    - paralleltest
+    - tparallel
+    - goerr113
+    - wrapcheck
+    - exhaustive
+    - exhaustivestruct
+    - makezero
+
+issues:
+  exclude-use-default: false
+  max-per-linter: 0
+  max-same-issues: 0
+  exclude:
+    - G204 # Subprocess launched with function call as argument or cmd arguments / Subprocess launched with variable
+  exclude-rules:
+    - path: version.go
+      text: (version|commit|date) is a global variable
+    - path: publish/publish.go
+      text: availableArchitectures is a global variable
+    - path: manifest/manifest.go
+      text: 'G306: Expect WriteFile permissions to be 0600 or less'
