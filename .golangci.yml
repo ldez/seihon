@@ -5,6 +5,8 @@ run:
 linters-settings:
   govet:
     enable-all: true
+    disable:
+      - fieldalignment
   gocyclo:
     min-complexity: 12
   goconst:
@@ -41,10 +43,17 @@ linters-settings:
       - '^panic$'
       - '^spew\.Print(f|ln)?$'
       - '^spew\.Dump$'
+  tagliatelle:
+    case:
+      use-field-name: true
+      rules:
+        json: snake
 
 linters:
   enable-all: true
   disable:
+    - golint # deprecated
+    - scopelint # deprecated
     - maligned # deprecated
     - interfacer # deprecated
     - sqlclosecheck # not relevant (SQL)
