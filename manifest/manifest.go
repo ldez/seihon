@@ -7,7 +7,7 @@ import (
 	"os"
 	"os/exec"
 
-	"github.com/docker/distribution/manifest/manifestlist"
+	"github.com/distribution/distribution/v3/manifest/manifestlist"
 )
 
 const manifestPath = "./manifest.json"
