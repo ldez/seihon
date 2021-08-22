@@ -97,9 +97,14 @@ func (d DockerPub) Clean(dryRun bool) error {
 }
 
 func createDockerfile(dockerfile, baseRuntimeImage string, option ArchDescriptor, objDigest digest.Digest, dockerfileTemplate string) error {
+	tmpl, err := os.ReadFile(dockerfileTemplate)
+	if err != nil {
+		return err
+	}
+
 	parse, err := template.New("tmpl.Dockerfile").
 		Funcs(sprig.FuncMap()).
-		ParseFiles(dockerfileTemplate)
+		Parse(string(tmpl))
 	if err != nil {
 		return err
 	}
