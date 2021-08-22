@@ -63,5 +63,5 @@ func inspect(baseImageName, manifestPath string) error {
 		return err
 	}
 
-	return os.WriteFile(manifestPath, output, 0666)
+	return os.WriteFile(manifestPath, output, 0o666)
 }
