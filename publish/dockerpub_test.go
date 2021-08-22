@@ -14,7 +14,7 @@ func TestNewDockerPub(t *testing.T) {
 	targets, err := GetTargetedArchitectures([]string{"arm.v6", "arm.v7", "arm.v8", "amd64", "386"})
 	require.NoError(t, err)
 
-	pub, err := NewDockerPub("image", []string{"v666", "latest"}, "alpine:3.13", targets, "../tmpl.Dockerfile")
+	pub, err := NewDockerPub("image", []string{"v666", "latest"}, "alpine:3.13", targets, "./fixtures/example.Dockerfile")
 	require.NoError(t, err)
 
 	defer func() { _ = pub.Clean(false) }()

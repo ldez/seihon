@@ -5,6 +5,7 @@ import (
 	"html/template"
 	"os"
 	"os/exec"
+	"path/filepath"
 
 	"github.com/Masterminds/sprig/v3"
 	"github.com/ldez/seihon/manifest"
@@ -97,7 +98,7 @@ func (d DockerPub) Clean(dryRun bool) error {
 }
 
 func createDockerfile(dockerfile, baseRuntimeImage string, option ArchDescriptor, objDigest digest.Digest, dockerfileTemplate string) error {
-	parse, err := template.New("tmpl.Dockerfile").
+	parse, err := template.New(filepath.Base(dockerfileTemplate)).
 		Funcs(sprig.FuncMap()).
 		ParseFiles(dockerfileTemplate)
 	if err != nil {
