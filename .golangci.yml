@@ -74,6 +74,7 @@ linters:
     - exhaustive
     - exhaustivestruct
     - makezero
+    - varnamelen
 
 issues:
   exclude-use-default: false
