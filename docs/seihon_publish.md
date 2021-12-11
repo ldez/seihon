@@ -13,7 +13,7 @@ seihon publish [flags]
 ### Options
 
 ```
-  -b, --base-runtime-image string   Base Docker image. (default "alpine:3.13")
+  -b, --base-runtime-image string   Base Docker image. (default "alpine:3.15")
       --dry-run                     Dry run mode. (default true)
   -h, --help                        help for publish
   -i, --image-name string           Image name (user/repo)

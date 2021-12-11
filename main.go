@@ -94,7 +94,7 @@ func newPublishCmd() *cobra.Command {
 	flags.StringVarP(&opts.imageName, "image-name", "i", "", "Image name (user/repo)")
 	flags.StringSliceVarP(&opts.versions, "versions", "v", nil, "Image version.")
 	flags.StringVar(&opts.dockerfileTemplate, "template", "./tmpl.Dockerfile", "Dockerfile template")
-	flags.StringVarP(&opts.baseRuntimeImage, "base-runtime-image", "b", "alpine:3.13", "Base Docker image.")
+	flags.StringVarP(&opts.baseRuntimeImage, "base-runtime-image", "b", "alpine:3.15", "Base Docker image.")
 	flags.StringSliceVar(&opts.targets, "targets", []string{"arm.v6", "arm.v7", "arm.v8", "amd64", "386"}, "Targeted architectures.")
 	flags.BoolVar(&opts.dryRun, "dry-run", true, "Dry run mode.")
 
