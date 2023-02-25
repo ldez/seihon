@@ -112,7 +112,7 @@ func createDockerfile(dockerfile, baseRuntimeImage string, option ArchDescriptor
 		"RuntimeImage": fmt.Sprintf("%s@%s", baseRuntimeImage, objDigest),
 	}
 
-	file, err := os.Create(dockerfile)
+	file, err := os.Create(filepath.Clean(dockerfile))
 	if err != nil {
 		return err
 	}

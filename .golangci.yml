@@ -52,12 +52,19 @@ linters-settings:
 linters:
   enable-all: true
   disable:
+    - deadcode # deprecated
+    - exhaustivestruct # deprecated
     - golint # deprecated
-    - scopelint # deprecated
-    - maligned # deprecated
+    - ifshort # deprecated
     - interfacer # deprecated
+    - maligned # deprecated
+    - nosnakecase # deprecated
+    - scopelint # deprecated
+    - structcheck # deprecated
+    - varcheck # deprecated
     - sqlclosecheck # not relevant (SQL)
     - rowserrcheck # not relevant (SQL)
+    - execinquery # not relevant (SQL)
     - cyclop # duplicate of gocyclo
     - lll
     - dupl
@@ -72,7 +79,7 @@ linters:
     - goerr113
     - wrapcheck
     - exhaustive
-    - exhaustivestruct
+    - exhaustruct
     - makezero
     - varnamelen
 
@@ -82,6 +89,7 @@ issues:
   max-same-issues: 0
   exclude:
     - G204 # Subprocess launched with function call as argument or cmd arguments / Subprocess launched with variable
+    - 'package-comments: should have a package comment'
   exclude-rules:
     - path: version.go
       text: (version|commit|date) is a global variable
