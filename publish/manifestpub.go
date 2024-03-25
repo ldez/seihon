@@ -35,7 +35,7 @@ func NewManifestPub(imageName, version string, targets map[string]ArchDescriptor
 	})
 
 	mc := []string{"manifest", "create", "--amend", fmt.Sprintf("%s:%s", imageName, version)}
-	_ = orderlyBrowse(targets, func(target string, option ArchDescriptor) error {
+	_ = orderlyBrowse(targets, func(target string, _ ArchDescriptor) error {
 		mc = append(mc, fmt.Sprintf("%s:%s-%s", imageName, version, target))
 		return nil
 	})

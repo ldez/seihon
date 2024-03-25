@@ -1,6 +1,5 @@
 run:
-  deadline: 2m
-  skip-files: []
+  timeout: 2m
 
 linters-settings:
   govet:
@@ -17,10 +16,13 @@ linters-settings:
   gofumpt:
     extra-rules: true
   depguard:
-    list-type: blacklist
-    include-go-root: false
-    packages:
-      - github.com/pkg/errors
+    rules:
+      main:
+        deny:
+          - pkg: "github.com/instana/testify"
+            desc: not allowed
+          - pkg: "github.com/pkg/errors"
+            desc: Should be replaced by standard lib errors package
   godox:
     keywords:
       - FIXME
@@ -36,7 +38,7 @@ linters-settings:
       - paramTypeCombine # already handle by gofumpt.extra-rules
     settings:
       hugeParam:
-        sizeThreshold: 100
+        sizeThreshold: 200
   forbidigo:
     forbid:
       - '^print(ln)?$'
@@ -48,6 +50,9 @@ linters-settings:
       use-field-name: true
       rules:
         json: snake
+  gosec:
+    excludes:
+      - G204 # Subprocess launched with function call as argument or cmd arguments / Subprocess launched with variable
 
 linters:
   enable-all: true
@@ -85,11 +90,11 @@ linters:
 
 issues:
   exclude-use-default: false
-  max-per-linter: 0
+  max-issues-per-linter: 0
   max-same-issues: 0
   exclude:
-    - G204 # Subprocess launched with function call as argument or cmd arguments / Subprocess launched with variable
     - 'package-comments: should have a package comment'
+    - fmt.Sprintf can be replaced with string
   exclude-rules:
     - path: version.go
       text: (version|commit|date) is a global variable
@@ -97,3 +102,7 @@ issues:
       text: availableArchitectures is a global variable
     - path: manifest/manifest.go
       text: 'G306: Expect WriteFile permissions to be 0600 or less'
+
+output:
+  show-stats: true
+  sort-results: true

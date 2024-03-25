@@ -37,7 +37,7 @@ func main() {
 		Use:    "doc",
 		Short:  "Generate documentation",
 		Hidden: true,
-		RunE: func(cmd *cobra.Command, args []string) error {
+		RunE: func(_ *cobra.Command, _ []string) error {
 			return doc.GenMarkdownTree(rootCmd, "./docs")
 		},
 	}
@@ -67,7 +67,7 @@ func newPublishCmd() *cobra.Command {
 		Use:   "publish",
 		Short: "Build and publish multi-arch Docker image.",
 		Long:  `Build and publish multi-arch Docker image.`,
-		PreRunE: func(cmd *cobra.Command, args []string) error {
+		PreRunE: func(cmd *cobra.Command, _ []string) error {
 			if err := validateRequiredFlags(cmd); err != nil {
 				return err
 			}
@@ -85,7 +85,7 @@ func newPublishCmd() *cobra.Command {
 
 			return nil
 		},
-		RunE: func(cmd *cobra.Command, _ []string) error {
+		RunE: func(_ *cobra.Command, _ []string) error {
 			return run(opts)
 		},
 	}
